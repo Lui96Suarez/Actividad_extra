@@ -116,15 +116,24 @@ export class CatalogView {
 
     // Escucha los clics en los botones de "Agregar al carrito" [cite: 28]
     bindAddToCart(handler) {
-        const catalogContainer = document.getElementById('catalog-container');
-        
-        // Si no está el contenedor en el DOM, no asignes el listener
-        if (!catalogContainer) return; 
+        // Usamos this.productsContainer que ya está inicializado y sí tiene un ID válido
+        if (!this.productsContainer) return; 
 
-        catalogContainer.addEventListener('click', (e) => {
+        this.productsContainer.addEventListener('click', (e) => {
+            // Verificamos si el clic fue exactamente en el botón de agregar al carrito
             if (e.target.classList.contains('btn-add-cart')) {
                 const productId = e.target.getAttribute('data-id');
                 handler(productId);
+                
+                // Opcional: Feedback visual rápido para el usuario
+                const btn = e.target;
+                const originalText = btn.textContent;
+                btn.textContent = '¡Agregado!';
+                btn.style.backgroundColor = 'var(--success)';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.backgroundColor = '';
+                }, 1000);
             }
         });
     }

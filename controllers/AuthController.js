@@ -71,12 +71,23 @@ export class AuthController {
         const adminLink = document.getElementById('nav-admin');
         const authLink = document.getElementById('nav-auth');
         
-        if (role === 'Administrador' && adminLink) {
-            adminLink.style.display = 'inline-block'; // Muestra la ruta protegida 
-        }
-        if (authLink) {
-            authLink.textContent = 'Mi Perfil';
-            authLink.href = '#/profile';
+        const activeSession = JSON.parse(sessionStorage.getItem('activeSession'));
+
+        if (activeSession) {
+            if (authLink) {
+                // En vez de decir "Iniciar Sesión", ahora va a su Perfil
+                authLink.textContent = 'Mi Perfil';
+                authLink.setAttribute('href', '#/profile'); 
+            }
+            if (role === 'Administrador' && adminLink) {
+                adminLink.style.display = 'inline-block';
+            }
+        } else {
+            if (authLink) {
+                authLink.textContent = 'Iniciar Sesión';
+                authLink.setAttribute('href', '#/auth');
+            }
+            if (adminLink) adminLink.style.display = 'none';
         }
     }
 }
