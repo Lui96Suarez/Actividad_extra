@@ -1,0 +1,27 @@
+<div class="catalog-container">
+    <h2>Catálogo de Productos</h2>
+    
+    <section class="filters-sidebar">
+        <div class="filter-group">
+            <label for="search-input">Buscar:</label>
+            <input type="text" id="search-input" placeholder="¿Qué estás buscando?">
+        </div>
+
+        <div class="filter-group">
+            <label for="category-select">Categoría:</label>
+            <select id="category-select">
+                <option value="all">Todas las categorías</option>
+                </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="price-range">Precio Máximo: $<span id="price-value">1000</span></label>
+            <input type="range" id="price-range" min="0" max="1000" step="1" value="1000">
+        </div>
+    </section>
+
+    <div id="catalog-loading" style="display: none;">Cargando catálogo...</div>
+
+    <div id="products-container" class="products-grid">
+        </div>
+</div>

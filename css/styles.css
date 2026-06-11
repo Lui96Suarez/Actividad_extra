@@ -1,0 +1,384 @@
+/* ==========================================================================
+   1. VARIABLES DE DISEÑO (TEMA CLARO POR DEFECTO)
+   ========================================================================== */
+:root {
+    --bg-primary: #f8f9fa;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --text-main: #2d3748;
+    --text-muted: #718096;
+    --primary: #00875a; /* Verde Premium UCAB */
+    --primary-hover: #006644;
+    --secondary: #4a5568;
+    --accent: #e2e8f0;
+    --border-color: #e2e8f0;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --transition: all 0.3s ease;
+    
+    /* Estados */
+    --success: #38a169;
+    --warning: #dd6b20;
+    --danger: #e53e3e;
+}
+
+/* ==========================================================================
+   2. VARIANTES PARA MODO OSCURO
+   ========================================================================== */
+body.dark-mode {
+    --bg-primary: #1a202c;
+    --bg-secondary: #2d3748;
+    --bg-card: #2d3748;
+    --text-main: #f7fafc;
+    --text-muted: #a0aec0;
+    --border-color: #4a5568;
+    --accent: #4a5568;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   3. RESETS Y MAQUETADO BASE
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    transition: var(--transition);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    padding: 2rem;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Elementos de formulario genéricos */
+input, select, textarea {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--bg-secondary);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    transition: var(--transition);
+}
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 135, 90, 0.2);
+}
+
+button {
+    cursor: pointer;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 6px;
+    transition: var(--transition);
+}
+
+/* ==========================================================================
+   4. ESTRUCTURA GLOBAL (HEADER, NAV, FOOTER)
+   ========================================================================== */
+header {
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--shadow);
+}
+
+#main-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+#main-nav a {
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+#main-nav a:hover {
+    color: var(--primary);
+    background-color: var(--bg-primary);
+}
+
+#connection-status {
+    background-color: var(--success);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+}
+
+footer {
+    background-color: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    padding: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   5. MÓDULO 2: AUTENTICACIÓN Y ACCESO (auth.html)
+   ========================================================================== */
+.auth-container {
+    max-width: 450px;
+    margin: 4rem auto;
+    background-color: var(--bg-secondary);
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.auth-container h2 { margin-bottom: 1.5rem; }
+
+.auth-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+#btn-login { background-color: var(--primary); color: white; flex: 1; }
+#btn-login:hover { background-color: var(--primary-hover); }
+#btn-register { background-color: var(--secondary); color: white; flex: 1; }
+
+.link-btn {
+    background: none;
+    color: var(--primary);
+    font-size: 0.9rem;
+    text-decoration: underline;
+    padding: 0;
+}
+
+/* ==========================================================================
+   6. MÓDULO 3 Y 5: CATÁLOGO Y FEEDBACK (catalog.html)
+   ========================================================================== */
+.catalog-container {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .catalog-container { grid-template-columns: 1fr; }
+}
+
+.filters-sidebar {
+    background-color: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    height: fit-content;
+}
+
+.filter-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.product-card {
+    background-color: var(--bg-card);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border-color);
+}
+
+.product-img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    background-color: white;
+    padding: 1rem;
+}
+
+.product-info {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-title { font-size: 1.1rem; margin-bottom: 0.5rem; }
+.product-category span {
+    background-color: var(--accent);
+    color: var(--text-main);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+.product-description {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0.75rem 0;
+    flex: 1;
+}
+.product-price {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+.btn-add-cart {
+    background-color: var(--primary);
+    color: white;
+    width: 100%;
+}
+.btn-add-cart:hover { background-color: var(--primary-hover); }
+
+/* Feedback Reseñas incorporadas */
+.product-feedback {
+    border-top: 1px solid var(--border-color);
+    padding: 1rem 1.25rem;
+    background-color: var(--bg-primary);
+    font-size: 0.85rem;
+}
+.reviews-list {
+    max-height: 100px;
+    overflow-y: auto;
+    margin: 0.5rem 0;
+}
+.review-form { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+.review-form select { width: 90px; margin-bottom: 0; padding: 0.25rem; }
+.review-form input { margin-bottom: 0; padding: 0.25rem; flex: 1; }
+.review-form button { padding: 0.25rem 0.75rem; background-color: var(--secondary); color: white; }
+
+/* ==========================================================================
+   7. MÓDULO 4: CARRITO Y CHECKOUT (cart.html)
+   ========================================================================== */
+.cart-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+@media (max-width: 900px) {
+    .cart-layout { grid-template-columns: 1fr; }
+}
+
+.cart-item-row {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-secondary);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow);
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.cart-item-img { width: 70px; height: 70px; object-fit: contain; }
+.cart-item-details { flex: 1; min-width: 150px; }
+.cart-item-actions { display: flex; align-items: center; gap: 0.75rem; }
+.cart-item-actions button {
+    padding: 0.25rem 0.6rem;
+    background-color: var(--accent);
+    color: var(--text-main);
+    font-weight: bold;
+}
+.btn-item-remove { background-color: transparent !important; }
+
+.cart-summary-section {
+    background-color: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    height: fit-content;
+}
+.summary-totals p {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+/* ==========================================================================
+   8. MÓDULO 6: PANEL DE ADMINISTRACIÓN (admin.html)
+   ========================================================================== */
+.admin-dashboard-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+.metric-card {
+    background-color: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    border-left: 5px solid var(--primary);
+}
+.metric-card p { font-size: 1.8rem; font-weight: bold; margin-top: 0.5rem; }
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-top: 1rem;
+}
+.admin-table th, .admin-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+.admin-table th { background-color: var(--accent); }
+.admin-table-thumb { width: 40px; height: 40px; object-fit: contain; }
+
+.btn-small { padding: 0.4rem 0.8rem; font-size: 0.85rem; margin-right: 0.25rem;}
+.btn-success { background-color: var(--success); color: white; }
+.btn-secondary { background-color: var(--secondary); color: white; }
+.btn-delete { background-color: var(--danger); color: white; }
+
+.status-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+.status-pendiente { background-color: #feebc8; color: #c05621; }
+.status-enviado { background-color: #e2e8f0; color: #4a5568; }
+.status-entregado { background-color: #c6f6d5; color: #22543d; }
+
+.table-responsive { overflow-x: auto; margin-bottom: 2rem; }

@@ -1,0 +1,44 @@
+<div class="cart-page-container">
+    <h2>Tu Carrito de Compras</h2>
+
+    <div class="cart-layout">
+        <section class="cart-items-section">
+            <div id="cart-items-container">
+                </div>
+        </section>
+
+        <section class="cart-summary-section">
+            <h3>Resumen del Pedido</h3>
+            <div class="summary-totals">
+                <p>Subtotal: <span id="cart-subtotal">$0.00</span></p>
+                <p><strong>Total: <span id="cart-total">$0.00</span></strong></p>
+            </div>
+
+            <hr>
+
+            <h3>Pasarela de Pago Simulada</h3>
+            <form id="checkout-form">
+                <div class="form-group">
+                    <label for="card-name">Nombre en la Tarjeta:</label>
+                    <input type="text" id="card-name" placeholder="Juan Pérez" required>
+                </div>
+                <div class="form-group">
+                    <label for="card-number">Número de Tarjeta (Simulado):</label>
+                    <input type="text" id="card-number" placeholder="4556 1234 5678 9101" maxlength="16" required>
+                </div>
+                <div class="form-group row">
+                    <div>
+                        <label for="card-expiry">Vencimiento:</label>
+                        <input type="text" id="card-expiry" placeholder="MM/AA" maxlength="5" required>
+                    </div>
+                    <div>
+                        <label for="card-cvc">CVC:</label>
+                        <input type="password" id="card-cvc" placeholder="123" maxlength="3" required>
+                    </div>
+                </div>
+                <button type="submit" id="btn-checkout" class="btn-primary">Finalizar Compra</button>
+            </form>
+            <p id="checkout-message"></p>
+        </section>
+    </div>
+</div>

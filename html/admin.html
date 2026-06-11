@@ -1,0 +1,74 @@
+<div class="admin-page-container">
+    <h2>Panel de Control - Administrador</h2>
+
+    <section class="admin-dashboard-metrics">
+        <div class="metric-card">
+            <h3>Ingresos Totales</h3>
+            <p id="metric-revenue">$0.00</p>
+        </div>
+        <div class="metric-card">
+            <h3>Usuarios Activos / Registrados</h3>
+            <p id="metric-users">0 / 0</p>
+        </div>
+        <div class="metric-card">
+            <h3>Top 3 Más Vendidos</h3>
+            <ol id="metric-top-products">
+                </ol>
+        </div>
+    </section>
+
+    <section class="admin-inventory-section">
+        <h3>Gestión de Inventario (Productos)</h3>
+        
+        <form id="product-form" class="admin-form">
+            <input type="hidden" id="product-id"> <div class="form-row">
+                <input type="text" id="product-title" placeholder="Título del Producto" required>
+                <input type="number" id="product-price" placeholder="Precio ($)" step="0.01" required>
+            </div>
+            <div class="form-row">
+                <input type="text" id="product-category" placeholder="Categoría" required>
+                <input type="url" id="product-image" placeholder="URL de la Imagen (ej. de un CDN)" required>
+            </div>
+            <textarea id="product-description" placeholder="Descripción detallada del producto" required></textarea>
+            <button type="submit" id="btn-submit-product" class="btn-success">Guardar Producto</button>
+            <button type="button" id="btn-cancel-edit" class="btn-secondary" style="display: none;">Cancelar Edición</button>
+        </form>
+
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Imagen</th>
+                        <th>Título</th>
+                        <th>Categoría</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="inventory-table-body">
+                    </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="admin-sales-section">
+        <h3>Historial de Órdenes y Ventas</h3>
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID Pedido</th>
+                        <th>Cliente Email</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Estado Actual</th>
+                        <th>Cambiar Estado</th>
+                    </tr>
+                </thead>
+                <tbody id="sales-table-body">
+                    </tbody>
+            </table>
+        </div>
+    </section>
+</div>
