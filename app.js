@@ -30,6 +30,7 @@ const routes = {
     '#/catalog': './html/catalog.html',
     '#/cart': './html/cart.html',
     '#/admin': './html/admin.html',
+    '#/profile': './html/profile.html'
 };
 
 async function router() {
@@ -91,6 +92,65 @@ function initializeController(hash) {
             adminController.init();
             break;
 
+        case '#/profile':
+            const activeSession = JSON.parse(sessionStorage.getItem('activeSession'));
+            if (!activeSession) {
+                window.location.hash = '#/auth';
+                return;
+            }
+
+            // 2. Mapear elementos del DOM recién inyectados
+            const emailInput = document.getElementById('profile-email');
+            const usernameInput = document.getElementById('profile-username');
+            const phoneInput = document.getElementById('profile-phone');
+            const profileForm = document.getElementById('profile-form');
+            const logoutBtn = document.getElementById('btn-logout');
+            const msgContainer = document.getElementById('profile-messages');
+
+            // 3. Cargar datos actuales desde la sesión o el localStorage de usuarios
+            emailInput.value = activeSession.email;
+            
+            // Si ya guardó nombre o teléfono antes, los precargamos
+            const allUsers = JSON.parse(localStorage.getItem('users')) || [];
+            const currentUserData = allUsers.find(u => u.email === activeSession.email);
+            if (currentUserData) {
+                usernameInput.value = currentUserData.username || '';
+                phoneInput.value = currentUserData.phone || '';
+            }
+
+            // 4. Listener para Guardar Cambios usando el modelo User.js
+            profileForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const updatedData = {
+                    username: usernameInput.value.trim(),
+                    phone: phoneInput.value.trim()
+                };
+
+                // Invocas el método que ya programaste en tu User.js
+                const response = userModel.updateProfile(activeSession.email, updatedData);
+
+                if (response.success) {
+                    msgContainer.textContent = "¡Perfil actualizado con éxito!";
+                    msgContainer.style.color = "var(--success)";
+                } else {
+                    msgContainer.textContent = "Error al actualizar.";
+                    msgContainer.style.color = "var(--danger)";
+                }
+            });
+
+            // 5. Listener para Cerrar Sesión
+            logoutBtn.addEventListener('click', () => {
+                userModel.logoutUser(); // Limpia sessionStorage
+                
+                // Resetear Navbar global (puedes llamar a un método o simplemente recargar)
+                const authLink = document.getElementById('nav-auth');
+                if (authLink) authLink.textContent = 'Iniciar Sesión';
+                const adminLink = document.getElementById('nav-admin');
+                if (adminLink) adminLink.style.display = 'none';
+
+                window.location.hash = '#/landing'; // Redirigir al inicio
+            });
         default:
             console.warn(`Ruta sin inicializador específico: ${hash}`);
             break;

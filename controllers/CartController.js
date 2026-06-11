@@ -24,24 +24,26 @@ export class CartController {
     }
 
     handlePlus = (productId) => {
+        // Convertimos a entero para garantizar que machee con el ID numérico del modelo
+        const idNumeric = parseInt(productId); 
         const products = this.productModel.getProducts();
-        const product = products.find(p => p.id === productId);
+        const product = products.find(p => p.id === idNumeric);
         if (product) {
-            this.cartModel.addProduct(product); // Incrementa la cantidad internamente
+            this.cartModel.addProduct(product);
             this.updateView();
         }
     };
 
     handleMinus = (productId) => {
-        this.cartModel.subtractProduct(productId); // Resta o remueve internamente
+        this.cartModel.subtractProduct(parseInt(productId)); // Convertir a entero
         this.updateView();
     };
 
     handleRemove = (productId) => {
-        this.cartModel.removeProduct(productId);
+        this.cartModel.removeProduct(parseInt(productId)); // Convertir a entero
         this.updateView();
     };
-
+    
     handleCheckout = (formData) => {
         const items = this.cartModel.getItems();
         if (items.length === 0) {

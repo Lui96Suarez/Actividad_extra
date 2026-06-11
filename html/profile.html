@@ -1,0 +1,26 @@
+<div class="auth-container"> <h2>Mi Perfil de Usuario</h2>
+    <p class="text-muted" style="text-align: center; margin-bottom: 1.5rem;">Gestiona la información de tu cuenta</p>
+    
+    <form id="profile-form">
+        <div class="form-group">
+            <label for="profile-email">Correo Electrónico:</label>
+            <input type="email" id="profile-email" disabled> 
+        </div>
+        
+        <div class="form-group">
+            <label for="profile-username">Nombre Completo:</label>
+            <input type="text" id="profile-username" placeholder="Tu nombre" required>
+        </div>
+
+        <div class="form-group">
+            <label for="profile-phone">Teléfono / Contacto:</label>
+            <input type="text" id="profile-phone" placeholder="Ej: +58 412...">
+        </div>
+        
+        <div class="auth-actions">
+            <button type="submit" id="btn-save-profile">Actualizar Datos</button>
+            <button type="button" id="btn-logout" class="btn-secondary" style="background-color: var(--danger);">Cerrar Sesión</button>
+        </div>
+    </form>
+    <p id="profile-messages" style="text-align: center; margin-top: 1rem; font-weight: bold;"></p>
+</div>
