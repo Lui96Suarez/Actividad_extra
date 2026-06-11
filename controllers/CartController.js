@@ -3,15 +3,17 @@ export class CartController {
         this.cartModel = cartModel;
         this.productModel = productModel; // Lo necesitaremos para clonar/añadir ítems válidos
         this.cartView = cartView;
-
-        // Conectamos los listeners de la vista con los manejadores de este controlador
-        this.cartView.bindCartActions(this.handlePlus, this.handleMinus, this.handleRemove);
-        this.cartView.bindCheckout(this.handleCheckout);
     }
 
     // Refresca la vista leyendo el estado actual del modelo
     init() {
+        // 1. Escaneamos los elementos del nuevo HTML del carrito
         this.cartView.initElements();
+
+        // 2. Conectamos los listeners ahora que el DOM está listo
+        this.cartView.bindCartActions(this.handlePlus, this.handleMinus, this.handleRemove);
+        this.cartView.bindCheckout(this.handleCheckout);
+
         this.updateView();
     }
 
@@ -36,11 +38,10 @@ export class CartController {
     };
 
     handleRemove = (productId) => {
-        this.cartModel.removeProduct(productId); // Elimina por completo
+        this.cartModel.removeProduct(productId);
         this.updateView();
     };
 
-    // Procesa el Checkout guardando una "Orden de Compra" para el Admin
     handleCheckout = (formData) => {
         const items = this.cartModel.getItems();
         if (items.length === 0) {

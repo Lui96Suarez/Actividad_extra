@@ -79,23 +79,49 @@ export class CatalogView {
 
     // Agrupa y expone los cambios en los filtros al controlador en tiempo real 
     bindFilters(handler) {
-        const triggerHandler = () => {
-            this.priceValue.textContent = this.priceRange.value;
-            handler({
-                searchTerm: this.searchInput.value,
-                category: this.categorySelect.value,
-                maxPrice: this.priceRange.value
+        // Escucha cada tecla presionada en el buscador
+        if (this.searchInput) {
+            this.searchInput.addEventListener('input', () => {
+                handler({
+                    searchTerm: this.searchInput.value.trim(),
+                    category: this.categorySelect.value,
+                    maxPrice: this.priceRange.value
+                });
             });
-        };
-
-        this.searchInput.addEventListener('input', triggerHandler);
-        this.categorySelect.addEventListener('change', triggerHandler);
-        this.priceRange.addEventListener('input', triggerHandler);
+        }
+        
+        // Escucha cambios en el select de categorías
+        if (this.categorySelect) {
+            this.categorySelect.addEventListener('change', () => {
+                handler({
+                    searchTerm: this.searchInput.value.trim(),
+                    category: this.categorySelect.value,
+                    maxPrice: this.priceRange.value
+                });
+            });
+        }
+        
+        // Escucha el deslizamiento del rango de precio
+        if (this.priceRange) {
+            this.priceRange.addEventListener('input', () => {
+                if (this.priceValue) this.priceValue.textContent = this.priceRange.value;
+                handler({
+                    searchTerm: this.searchInput.value.trim(),
+                    category: this.categorySelect.value,
+                    maxPrice: this.priceRange.value
+                });
+            });
+        }
     }
 
     // Escucha los clics en los botones de "Agregar al carrito" [cite: 28]
     bindAddToCart(handler) {
-        this.productsContainer.addEventListener('click', (e) => {
+        const catalogContainer = document.getElementById('catalog-container');
+        
+        // Si no está el contenedor en el DOM, no asignes el listener
+        if (!catalogContainer) return; 
+
+        catalogContainer.addEventListener('click', (e) => {
             if (e.target.classList.contains('btn-add-cart')) {
                 const productId = e.target.getAttribute('data-id');
                 handler(productId);

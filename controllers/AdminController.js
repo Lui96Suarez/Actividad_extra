@@ -2,56 +2,39 @@ export class AdminController {
     constructor(productModel, adminView) {
         this.productModel = productModel;
         this.adminView = adminView;
-
-        // Vinculamos los eventos de la interfaz de administración con este controlador
-        this.adminView.bindCreateProduct(this.handleCreateProduct);
-        this.adminView.bindUpdateProduct(this.handleUpdateProduct);
-        this.adminView.bindDeleteProduct(this.handleDeleteProduct);
-        this.adminView.bindUpdateOrderStatus(this.handleUpdateOrderStatus);
     }
 
     // Arranca el panel de administración cargando tablas y métricas
     init() {
+        // 1. Escaneamos los elementos del HTML del administrador recién inyectado
+        this.adminView.initElements();
+
+        // 2. Vinculamos los eventos de la interfaz con los manejadores
+        this.adminView.bindCreateProduct(this.handleCreateProduct);
+        this.adminView.bindUpdateProduct(this.handleUpdateProduct);
+        this.adminView.bindDeleteProduct(this.handleDeleteProduct);
+        this.adminView.bindUpdateOrderStatus(this.handleUpdateOrderStatus);
+
+        // 3. Renderizamos la información inicial del panel
         this.renderDashboard();
         this.renderInventory();
         this.renderSalesHistory();
     }
 
-    // --- 1. MÓDULO DE RESEÑAS Y PANEL VISUAL (MÉTRICAS) ---
+    // --- 1. MÓDULO DE RESEÑAS Y PANEL VISUAL (MÉTRICAS) --
     renderDashboard() {
-        // Obtenemos las órdenes de compra y los usuarios para calcular estadísticas
         const orders = JSON.parse(localStorage.getItem('orders')) || [];
         const users = JSON.parse(localStorage.getItem('users')) || [];
 
         // Métrica A: Total de ingresos generados
         const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
 
-        // Métrica B: Contador de usuarios registrados vs. activos (simulación basada en sesión)
+        // Métrica B: Contador de usuarios registrados vs. activos
         const totalUsers = users.length;
         const activeSession = sessionStorage.getItem('activeSession');
-        // Simulamos usuarios activos contando al actual y a los que tengan órdenes recientes
-        const activeUsers = users.filter(u => u.email === (activeSession ? JSON.parse(activeSession).email : '') || orders.some(o => o.email === u.email)).length;
+        const activeUsersCount = activeSession ? 1 : 0; 
 
-        // Métrica C: Top 3 productos más vendidos
-        const productCounts = {};
-        orders.forEach(order => {
-            order.items.forEach(item => {
-                productCounts[item.title] = (productCounts[item.title] || 0) + item.quantity;
-            });
-        });
-
-        const topProducts = Object.entries(productCounts)
-            .sort((a, b) => b[1] - a[1]) // Ordenamos de mayor a menor cantidad
-            .slice(0, 3)                // Tomamos solo los 3 primeros
-            .map(([title, qty]) => ({ title, qty }));
-
-        // Enviamos todo empaquetado a la vista para que dibuje las gráficas/tarjetas
-        this.adminView.renderMetrics({
-            totalRevenue: Number(totalRevenue.toFixed(2)),
-            totalUsers,
-            activeUsers,
-            topProducts
-        });
+        this.adminView.renderMetrics(totalRevenue, activeUsersCount, totalUsers);
     }
 
     // --- 2. GESTIÓN DE INVENTARIO (CRUD) ---
@@ -96,7 +79,7 @@ export class AdminController {
         if (orderIndex !== -1) {
             orders[orderIndex].status = newStatus; // 'Pendiente', 'Enviado' o 'Entregado'
             localStorage.setItem('orders', JSON.stringify(orders));
-            this.renderSalesHistory(); // Refrescamos la tabla de ventas
+            this.renderSalesHistory(); // Actualizamos la tabla visual de órdenes
         }
     };
 }

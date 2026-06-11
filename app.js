@@ -21,7 +21,7 @@ const catalogController = new CatalogController(productModel, cartModel, catalog
 const cartView = new CartView();
 const cartController = new CartController(cartModel, productModel, cartView);
 const adminView = new AdminView();
-const adminController = new AdminController(adminProductModel, adminView);
+const adminController = new AdminController(productModel, adminView);
 
 const routes = {
     '#/': './html/landing.html',
@@ -50,12 +50,16 @@ async function router() {
     if (viewUrl) {
         try {
             const response = await fetch(viewUrl);
-            const htmlContent = await response.html ? await response.text() : '';
+            
+            // CORRECCIÓN: Para obtener el HTML en texto plano se usa response.text() directamente
+            const htmlContent = await response.text();
             viewContainer.innerHTML = htmlContent;
 
             // 3. Inicializar el controlador correspondiente según la ruta
+            // Ahora que el HTML ya está inyectado, los controladores podrán encontrar sus botones
             initializeController(hash);
         } catch (error) {
+            console.error('Error en el enrutador:', error);
             viewContainer.innerHTML = '<h2>Error al cargar la página</h2>';
         }
     } else {
@@ -64,21 +68,32 @@ async function router() {
 }
 
 function initializeController(hash) {
-    // Aquí instanciaremos los controladores creados previamente pasándoles la vista
-    console.log(`Cargado controlador para: ${hash}`);
-    if (hash === '#/auth') {
-        authController.init(); // Mapea elementos y despierta los EventListeners// Inicializar AuthController conectándolo con los elementos recién inyectados
-    }
-    if (hash === '#/catalog') {
-        catalogView.initElements();       // Captura el DOM inyectado
-        catalogController.init();         // Carga productos desde la API/Local y enlaza eventos [cite: 56, 57]
-    }
-    if (hash === '#/cart') {
-        cartController.init(); // Despierta el carrito y el formulario de cobro
-    }
-    if (hash === '#/admin') {
-        adminView.initElements();   // Captura el árbol del DOM inyectado por el fetch
-        adminController.init();     // Calcula KPI, rellena inventario e historial de órdenes
+    switch (hash) {
+        case '#/':
+        case '#/landing':
+            // Si en el futuro necesitas un LandingController, lo inicializas aquí.
+            console.log('Cargada la página de inicio.');
+            break;
+
+        case '#/auth':
+            authController.init();
+            break;
+
+        case '#/catalog':
+            catalogController.init();
+            break;
+
+        case '#/cart':
+            cartController.init();
+            break;
+
+        case '#/admin':
+            adminController.init();
+            break;
+
+        default:
+            console.warn(`Ruta sin inicializador específico: ${hash}`);
+            break;
     }
 }
 

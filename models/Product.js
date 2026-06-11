@@ -1,64 +1,66 @@
-export class Product{
-    constructor(){
-        this.products = JSON.parse(localStorage.getItem('products')) || []
+export class Product {
+    constructor() {
+        this.products = JSON.parse(localStorage.getItem('products')) || [];
     }
 
-    async initCatalog(){
+    async initCatalog() {
+        // CORRECCIÓN: Se cambió 'lenght' por 'length'
+        if (this.products.length === 0) {
+            try {
+                const response = await fetch('https://fakestoreapi.com/products');
+                const data = await response.json();
 
-        if(this.products.lenght === 0){
-            try{
-                const response = await fetch('https://fakestoreapi.com/products')
-                const data = await response.json()
-
-                this.products = data
-                this.saveLocally()
-                return {success: true, message: 'Catalogo inicial cargado desde la API'}
-            }catch(error){
-                return {success: false, message: 'Error al cargar la API'}
+                this.products = data;
+                this.saveLocally();
+                return { success: true, message: 'Catálogo inicial cargado desde la API' };
+            } catch (error) {
+                return { success: false, message: 'Error al cargar la API' };
             }
         }
 
-        return {success: true, message: 'Catalogo cargado desde local.'}
+        return { success: true, message: 'Catálogo cargado desde local.' };
     }
 
-    saveLocally(){
-        localStorage.setItem('products', JSON.stringify(this.products))
+    saveLocally() {
+        localStorage.setItem('products', JSON.stringify(this.products));
     }
 
-    //CRUD
-
-    getProducts(){
-        return this.products
+    getProducts() {
+        return this.products;
     }
 
-    addProduct(productData){
+    addProduct(productData) {
+        // CORRECCIÓN: Se cambió 'lenght' por 'length'
+        const newID = this.products.length > 0 ? Math.max(...this.products.map(p => p.id)) + 1 : 1;
+        const newProduct = { id: newID, ...productData };
 
-        const newID = this.products.lenght > 0 ? Math.max(...this.products.map(p => p.id)) +1 : 1
-        const newProduct = {id: newID, ...productData}
-
-        this.products.push(newProduct)
-        this.saveLocally()
-        return {success: true, product: newProduct}
+        this.products.push(newProduct);
+        this.saveLocally();
+        return { success: true, product: newProduct };
     }
 
-    updateProduct(id, updateData){
-        const index = this.products.findIndex((p) => p.id === id)
-        if(index !== -1){
-            this.products[index] = {...this.prodcuts[index], ...updateData}
-            this.saveLocally()
-            return {success: true, product: this.products[index]}
-        }
-        return {success: false, message: 'producto no encontrado'}
-    }
-
-    deleteProduct(id){
-        const initialLength = this.products.lenght
-        this.prodcuts = this.products.filter(p => p.id !== id)
-
-        if(this.products.lenght > initialLength){
+    updateProduct(id, updateData) {
+        const index = this.products.findIndex((p) => p.id === id);
+        if (index !== -1) {
+            // CORRECCIÓN: Se cambió 'this.prodcuts' por 'this.products'
+            this.products[index] = { ...this.products[index], ...updateData };
             this.saveLocally();
-            return {success: true, message: 'producto Eliminado'}
+            return { success: true, product: this.products[index] };
         }
-        return {succcess: false, message: 'Prodcuto No encontrado'}
+        return { success: false, message: 'Producto no encontrado' };
+    }
+
+    deleteProduct(id) {
+        // CORRECCIÓN: Se cambió 'lenght' por 'length'
+        const initialLength = this.products.length;
+        
+        // CORRECCIÓN: Se cambió 'this.prodcuts' por 'this.products'
+        this.products = this.products.filter(p => p.id !== id);
+        
+        if (this.products.length < initialLength) {
+            this.saveLocally();
+            return { success: true, message: 'Producto eliminado con éxito' };
+        }
+        return { success: false, message: 'Producto no encontrado' };
     }
 }
